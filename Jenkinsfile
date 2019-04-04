@@ -1,6 +1,7 @@
 String buildShell = "${env.buildShell}"
 String targetHosts = "${env.targetHosts}"
 String targetDir = "${env.targetDir}"
+String serviceName = "${env.serviceName}"
 
 node("master"){
     stage("checkout"){
@@ -11,7 +12,7 @@ node("master"){
     stage("build"){
         def mvnHome = tool 'M3'
         sh " ${mvnHome}/bin/mvn clean install -DskipTests "
-        sh " mv  service.sh target/*.jar /srv/salt/${JOB_NAME} "
+        sh " mv  service.sh target/*.jar /srv/salt/test "
     }
     
     stage("deploy"){
