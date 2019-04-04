@@ -10,13 +10,13 @@ node("master"){
     
     stage("build"){
         sh " mvn ${buildShell} "
-        sh " mv  start.sh target/*.jar /srv/salt/${JOB_NAME} "
+        sh " mv  service.sh target/*.jar /srv/salt/${JOB_NAME} "
     }
     
     stage("deploy"){
         sh "sh start.sh stop"
         sh " salt ${targetHosts} cp.get_file salt:// ' ' "
-        sh " sh start.sh start "
+        sh " salt sh service.sh restart "
     }
 
 
