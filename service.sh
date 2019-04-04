@@ -2,12 +2,11 @@
 
 app=$2
 port=$3
-user=$4
-targetDir=$5
+targetDir=$4
 
 start(){
     cd ${targetDir}
-    nohup java -jar *.jar --server.port=${port} >>/dev/null 2>&1& echo $! > service.pid
+    nohup java -jar ${app} --server.port=${port} >>/dev/null 2>&1& echo $! > service.pid
     cd -
     
 }
