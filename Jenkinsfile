@@ -9,7 +9,8 @@ node("master"){
     
     
     stage("build"){
-        sh " mvn clean install -DskipTests "
+        def mvnHome = tool 'M3'
+        sh " ${mvnHome}/bin/mvn clean install -DskipTests "
         sh " mv  service.sh target/*.jar /srv/salt/${JOB_NAME} "
     }
     
