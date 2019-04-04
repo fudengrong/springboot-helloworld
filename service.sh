@@ -1,8 +1,9 @@
 #!/bin/bash
 
-app=null
-port=null
-user=null
+app=$2
+port=$3
+user=$4
+targetDir=$5
 
 start(){
     cd ${targetDir}
