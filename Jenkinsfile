@@ -21,6 +21,7 @@ node("master"){
     }
     
     stage("deploy"){
+        sh " salt ${targetHosts} cmd.run ' rm -fr  ${targetDir}/*.jar '"
         sh " salt ${targetHosts} cp.get_file salt://${serviceName}/${jarName}  ${targetDir}/${jarName} mkdirs=True"
         sh " salt ${targetHosts} cp.get_file salt://${serviceName}/service.sh  ${targetDir}/service.sh mkdirs=True"
         sh " salt ${targetHosts} cmd.run 'chown ${user}:${user} ${targetDir} -R '"
