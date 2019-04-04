@@ -15,9 +15,14 @@ start(){
 
 stop(){
     pid=`cat service.pid`
-    kill -9 ${pid}
-    kill -9 ${pid}
-    kill -9 ${pid}
+    if [ -z $pid ]
+    then 
+        echo "pid"
+    else
+        kill -9 ${pid}
+        kill -9 ${pid}
+        kill -9 ${pid}
+    fi
 }
 
 
