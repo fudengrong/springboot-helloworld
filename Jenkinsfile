@@ -2,6 +2,8 @@ String buildShell = "${env.buildShell}"
 String targetHosts = "${env.targetHosts}"
 String targetDir = "${env.targetDir}"
 String serviceName = "${env.serviceName}"
+String user = "${env.user}"
+String port = "${env.port}"
 
 node("master"){
     stage("checkout"){
@@ -12,15 +14,18 @@ node("master"){
     stage("build"){
         def mvnHome = tool 'M3'
         sh " ${mvnHome}/bin/mvn clean install -DskipTests "
-        sh " mv  service.sh target/*.jar /srv/salt/test "
+        
+        def jarName = sh returnStdout: true, script: "ls *.jar"
+        jarName = jarName - "\n"
+        sh " mv  service.sh target/${jarName}.jar /srv/salt/test "
     }
     
     stage("deploy"){
-        sh " salt VM_0_12_centos cp.get_file salt://test/helloworld-0.0.1-SNAPSHOT.jar  /opt/javatest/helloworld-0.0.1-SNAPSHOT.jar mkdirs=True"
-        sh " salt VM_0_12_centos cp.get_file salt://test/service.sh  /opt/javatest/service.sh mkdirs=True"
-        sh " salt VM_0_12_centos cmd.run 'chown tomcat:tomcat /opt/javatest -R '"
-        sh " salt VM_0_12_centos cmd.run 'su - tomcat -c \"cd /opt/javatest &&  sh service.sh stop\" ' "
-        sh " salt VM_0_12_centos cmd.run 'su - tomcat -c \"cd /opt/javatest &&  sh service.sh start\" ' "
+        sh " salt VM_0_12_centos cp.get_file salt://test/${jarName}  ${targetDir}/${jarName} mkdirs=True"
+        sh " salt VM_0_12_centos cp.get_file salt://test/service.sh  ${targetDir}/service.sh mkdirs=True"
+        sh " salt VM_0_12_centos cmd.run 'chown ${user}:${user} ${targetDir} -R '"
+        sh " salt VM_0_12_centos cmd.run 'su - ${user} -c \"cd ${targetDir} &&  sh service.sh stop\" ' "
+        sh " salt VM_0_12_centos cmd.run 'su - ${user} -c \"cd ${targetDir} &&  sh service.sh start ${jarName} ${port} ${targetDir}\" ' "
     }
 
 
