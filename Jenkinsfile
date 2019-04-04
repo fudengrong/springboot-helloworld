@@ -10,14 +10,13 @@ node("master"){
         checkout scm
     }
     
-    
     stage("build"){
         def mvnHome = tool 'M3'
         sh " ${mvnHome}/bin/mvn ${buildShell} "
         
         def jarName = sh returnStdout: true, script: "ls target/*.jar"
         jarName = jarName - "\n"
-        sh " mv  service.sh target/${jarName}.jar /srv/salt/${serviceName} "
+        sh "mkdir -p /srv/salt/${serviceName} && mv  service.sh target/${jarName}.jar /srv/salt/${serviceName} "
     }
     
     stage("deploy"){
