@@ -14,9 +14,9 @@ node("master"){
         def mvnHome = tool 'M3'
         sh " ${mvnHome}/bin/mvn ${buildShell} "
         
-        def jarName = sh returnStdout: true, script: "ls target/*.jar"
+        def jarName = sh returnStdout: true, script: "cd target && ls *.jar"
         jarName = jarName - "\n"
-        sh "mkdir -p /srv/salt/${serviceName} && mv  service.sh target/${jarName}.jar /srv/salt/${serviceName} "
+        sh "mkdir -p /srv/salt/${serviceName} && mv  service.sh target/${jarName} /srv/salt/${serviceName} "
     }
     
     stage("deploy"){
