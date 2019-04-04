@@ -9,14 +9,16 @@ node("master"){
     
     
     stage("build"){
-        sh " mvn ${buildShell} "
+        sh " mvn clean install -DskipTests "
         sh " mv  service.sh target/*.jar /srv/salt/${JOB_NAME} "
     }
     
     stage("deploy"){
-        sh "sh start.sh stop"
-        sh " salt ${targetHosts} cp.get_file salt:// ' ' "
-        sh " salt sh service.sh restart "
+        sh " salt VM_0_12_centos cp.get_file salt://test/helloworld-0.0.1-SNAPSHOT.jar  /opt/javatest/helloworld-0.0.1-SNAPSHOT.jar mkdirs=True"
+        sh " salt VM_0_12_centos cp.get_file salt://test/service.sh  /opt/javatest/service.sh mkdirs=True"
+        sh " salt VM_0_12_centos cmd.run 'chown tomcat:tomcat /opt/javatest -R '"
+        sh " salt VM_0_12_centos cmd.run 'su - tomcat -c \"cd /opt/javatest &&  sh service.sh stop\" ' "
+        sh " salt VM_0_12_centos cmd.run 'su - tomcat -c \"cd /opt/javatest &&  sh service.sh start\" ' "
     }
 
 
