@@ -22,17 +22,18 @@ node("master"){
     stage("Push Nexus"){
         jarName = sh returnStdout: true, script: "cd target && ls *.jar"
         jarName = jarName - "\n"
-        nexusArtifactUploader(artifacts: [[artifactId: 'devops-service', 
+        def pom = readMavenPom file: 'pom.xml'
+        nexusArtifactUploader(artifacts: [[artifactId: "${pom.artifactId}", 
                                            classifier: '', 
-                                           file: "./target/${jarName}", 
-                                           type: 'jar']],
+                                           file: "./target/${pom.artifactId}-${pom.version}.${pom.packaging}", 
+                                           type: "${pom.packaging}"]],
                               credentialsId: 'nexus-admin', 
-                              groupId: 'com.demo', 
+                              groupId: "${pom.groupId}", 
                               nexusUrl: '192.168.0.44:8081', 
                               nexusVersion: 'nexus3', 
                               protocol: 'http', 
                               repository: 'devops-service', 
-                              version: '1.0')
+                              version: "${pom.version}")
         
     }
     
