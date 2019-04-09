@@ -20,10 +20,11 @@ node("master"){
     
     
     stage("Push Nexus"){
-    
+        jarName = sh returnStdout: true, script: "cd target && ls *.jar"
+        jarName = jarName - "\n"
         nexusArtifactUploader(artifacts: [[artifactId: 'devops-service', 
                                            classifier: '', 
-                                           file: './target/*.jar', 
+                                           file: "./target/${jarName}", 
                                            type: 'jar']],
                               credentialsId: 'nexus-admin', 
                               groupId: 'com.demo', 
