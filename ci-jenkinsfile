@@ -28,7 +28,7 @@ node("master"){
                                            type: 'jar']],
                               credentialsId: 'nexus-admin', 
                               groupId: 'com.demo', 
-                              nexusUrl: '192.168.0.44:8081/nexus', 
+                              nexusUrl: '192.168.0.44:8081', 
                               nexusVersion: 'nexus3', 
                               protocol: 'http', 
                               repository: 'devops-service', 
