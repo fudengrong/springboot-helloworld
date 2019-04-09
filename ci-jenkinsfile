@@ -3,7 +3,7 @@ def jarName
 node("master"){
     
     stage("Get Code"){
-        check scm
+        checkout scm
     }
     
     stage("Build & Unit Test"){
