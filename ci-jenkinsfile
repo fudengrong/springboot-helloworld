@@ -7,8 +7,8 @@ node("master"){
     }
     
     stage("Build & Unit Test"){
-
-        sh "mvn clean install "
+        def mvnHome="/usr/local/apache-maven-3.6.0" 
+        sh "${mvnHome}/bin/mvn clean install "
         
     }
     
