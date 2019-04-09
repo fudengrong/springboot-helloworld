@@ -17,8 +17,6 @@ node("master"){
         
     }
     
-    
-    
     stage("Push Nexus"){
         jarName = sh returnStdout: true, script: "cd target && ls *.jar"
         jarName = jarName - "\n"
@@ -32,7 +30,7 @@ node("master"){
                               nexusUrl: '192.168.0.44:8081', 
                               nexusVersion: 'nexus3', 
                               protocol: 'http', 
-                              repository: 'devops-service', 
+                              repository: "${pom.groupId}", 
                               version: "${pom.version}")
         
     }
