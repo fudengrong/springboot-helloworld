@@ -6,11 +6,9 @@ String user = "${env.user}"
 String port = "${env.port}"
 def jarName
 
-node(){
-    stage("checkout"){
-        checkout scm
-    }
-    
+pipeline {
+    agent any
+    stages{
     stage("build"){
         def mvnHome = tool 'MAVEN'
         sh " ${mvnHome}/bin/mvn ${buildShell} "
@@ -30,4 +28,5 @@ node(){
     }
 
 
+}
 }
