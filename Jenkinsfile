@@ -6,7 +6,7 @@ String user = "${env.user}"
 String port = "${env.port}"
 def jarName
 
-node("master"){
+node(){
     stage("checkout"){
         checkout scm
     }
