@@ -17,7 +17,7 @@ node("master"){
         
         jarName = sh returnStdout: true, script: "cd target && ls *.jar"
         jarName = jarName - "\n"
-        sh "mkdir -p /srv/salt/${serviceName} && mv  service.sh target/${jarName} /srv/salt/${serviceName} "
+        sh "mkdir -p /tmp/salt/${serviceName} && mv  service.sh target/${jarName} /tmp/salt/${serviceName} "
     }
     
     stage("deploy"){
