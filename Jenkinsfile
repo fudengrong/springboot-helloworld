@@ -6,11 +6,13 @@ String user = "${env.user}"
 String port = "${env.port}"
 def jarName
 
-pipeline {
-    agent any
-    stages{
+node{
+    stage("checkout"){
+        checkout scm
+    }
+    
     stage("build"){
-        def mvnHome = tool 'MAVEN'
+        def mvnHome = tool 'M3'
         sh " ${mvnHome}/bin/mvn ${buildShell} "
         
         jarName = sh returnStdout: true, script: "cd target && ls *.jar"
@@ -28,5 +30,4 @@ pipeline {
     }
 
 
-}
 }
